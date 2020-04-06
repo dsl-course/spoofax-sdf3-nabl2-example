@@ -1,0 +1,54 @@
+module static-semantics
+
+imports
+
+  signatures/-
+  
+signature
+
+	constructors
+	
+		INT: Type
+		BOOL: Type
+		FLOAT: Type
+
+rules
+
+	init ^ (s) := new s.
+
+	[[ NumberTypeLiteral() ^ (s) : INT() ]].
+	
+	[[ ToggleTypeLiteral() ^ (s) : BOOL() ]].
+	
+	[[ Number(_) ^ (s) : INT() ]].
+	
+	[[ BoolConstTrue() ^ (s): BOOL() ]].
+	
+	[[ BoolConstFalse() ^ (s) : BOOL() ]].
+	
+	[[ VarDecl(t1, i1, e1) ^ (s) ]] :=
+		[[ t1 ^ (s) : u ]],
+		[[ e1 ^ (s) : t ]],
+		u == t
+		// try also:
+//		u != t
+		.
+	
+	[[ Addition(e1, e2) ^ (s) : INT() ]] :=
+		[[ e1 ^ (s) : INT() ]],
+		[[ e2 ^ (s) : INT() ]].
+	
+	[[ Subtraction(e1, e2) ^ (s) : INT() ]] :=
+		[[ e1 ^ (s) : INT() ]],
+		[[ e2 ^ (s) : INT() ]].
+		
+	[[ Multiplication(e1, e2) ^ (s) : INT() ]] :=
+		[[ e1 ^ (s) : INT() ]],
+		[[ e2 ^ (s) : INT() ]].
+	
+	[[ Division(e1, e2) ^ (s) : FLOAT() ]] :=
+		[[ e1 ^ (s) : INT() ]],
+		[[ e2 ^ (s) : INT() ]].
+	
+	
+

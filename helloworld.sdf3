@@ -1,0 +1,45 @@
+module helloworld
+
+imports
+  
+  Common
+
+context-free start-symbols
+  
+  Start
+  
+context-free syntax
+	
+	Type.NumberTypeLiteral = <number>
+	Type.ToggleTypeLiteral = <toggle>
+
+context-free syntax
+  
+	Start.VarDecl = <<Type> <ID> = <Expr>;>
+  
+context-free syntax
+
+	Expr.Number 		= <<INT>>
+	Expr.Addition 		= <<Expr> + <Expr>>	{left}
+	Expr.Subtraction 	= <<Expr> - <Expr>> {left}
+	Expr.Multiplication = <<Expr> * <Expr>> {left}
+	Expr.Division 		= <<Expr> / <Expr>> {left}
+	
+	Expr.BoolConstTrue = <true>
+	Expr.BoolConstFalse = <false>
+	
+	Expr				= <(<Expr>)>		{bracket}
+	  
+ context-free priorities
+ 
+ 	Expr.Multiplication > Expr.Addition, Expr.Subtraction
+ 	
+ context-free priorities
+ 
+ 	Expr.Division > Expr.Addition, Expr.Subtraction
+  
+ template options
+ 
+ 	ID = keyword {reject} 
+  
+  
