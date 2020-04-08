@@ -11,6 +11,9 @@ signature
 		INT: Type
 		BOOL: Type
 		FLOAT: Type
+		STRING: Type
+		OPTIONAL: Type -> Type
+		EITHEROR : Type * Type -> Type
 
 rules
 
@@ -20,7 +23,11 @@ rules
 	
 	[[ ToggleTypeLiteral() ^ (s) : BOOL() ]].
 	
+	[[ TextTypeLiteral() ^ (s) : STRING() ]].
+	
 	[[ Number(_) ^ (s) : INT() ]].
+	
+	[[ String(_) ^ (s) : STRING() ]].
 	
 	[[ BoolConstTrue() ^ (s): BOOL() ]].
 	
@@ -29,15 +36,13 @@ rules
 	[[ VarDecl(t1, i1, e1) ^ (s) ]] :=
 		[[ t1 ^ (s) : u ]],
 		[[ e1 ^ (s) : t ]],
-		u == t
-		// try also:
-//		u != t
-		.
+		u == t.
 	
-	[[ Addition(e1, e2) ^ (s) : INT() ]] :=
-		[[ e1 ^ (s) : INT() ]],
-		[[ e2 ^ (s) : INT() ]].
-	
+	[[ Addition(e1, e2) ^ (s) : t ]] :=
+		[[ e1 ^ (s) : t ]],
+		[[ e2 ^ (s) : t ]],
+		t != BOOL().
+			
 	[[ Subtraction(e1, e2) ^ (s) : INT() ]] :=
 		[[ e1 ^ (s) : INT() ]],
 		[[ e2 ^ (s) : INT() ]].
@@ -49,6 +54,33 @@ rules
 	[[ Division(e1, e2) ^ (s) : FLOAT() ]] :=
 		[[ e1 ^ (s) : INT() ]],
 		[[ e2 ^ (s) : INT() ]].
+		
+		
+	[[ Cast(e1, t1) ^ (s) : u ]] :=
+		[[ t1 ^ (s) : u ]].
+		
+		
+	[[ OptionalTypeLiteral(u1) ^ (s) : OPTIONAL(t) ]] :=
+		[[ u1 ^ (s) : t ]].
+		
+	[[ OptionalJust(e1) ^ (s) : OPTIONAL(t) ]] :=
+		[[ e1 ^ (s) : t ]].
+		  
+	[[ OptionalNothing() ^ (s) : OPTIONAL(_) ]].
+	// Examples (copy-paste to `test.hel` and hover the mouse over `nothing` to see its type):
+	// optional[text]/optional[number] a = left nothing;
+	// optional[text]/optional[number] a = right nothing;
 	
+	
+	
+	[[ EitherOrTypeLiteral(u1, u2) ^ (s) : EITHEROR(t1, t2) ]] :=
+		[[ u1 ^ (s) : t1 ]],
+		[[ u2 ^ (s) : t2 ]].
+		
+	[[ EitherOrLeft(e1) ^ (s) : EITHEROR(t1, _) ]] :=
+		[[ e1 ^ (s) : t1 ]].
+		
+	[[ EitherOrRight(e2) ^ (s) : EITHEROR(_, t2) ]] :=
+		[[ e2 ^ (s) : t2 ]].
 	
 

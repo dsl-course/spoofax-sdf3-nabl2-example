@@ -12,10 +12,13 @@ context-free syntax
 	
 	Type.NumberTypeLiteral = <number>
 	Type.ToggleTypeLiteral = <toggle>
+	Type.TextTypeLiteral = <text>
+	Type.OptionalTypeLiteral = <optional[<Type>]>
+	Type.EitherOrTypeLiteral = <<Type>/<Type>>
 
 context-free syntax
   
-	Start.VarDecl = <<Type> <ID> = <Expr>;>
+	Start.VarDecl = <<Type> <ID> = <Expr>;> 
   
 context-free syntax
 
@@ -25,18 +28,42 @@ context-free syntax
 	Expr.Multiplication = <<Expr> * <Expr>> {left}
 	Expr.Division 		= <<Expr> / <Expr>> {left}
 	
+	Expr.String			= <<STRING>>
+	
+	Expr.Cast			= <(<Expr> as <Type>)>
+	
 	Expr.BoolConstTrue = <true>
 	Expr.BoolConstFalse = <false>
 	
+	
+	Expr.OptionalJust 		= <just <Expr>>	
+	Expr.OptionalNothing 	= <nothing>
+	
+	Expr.EitherOrLeft		= <left <Expr>>
+	Expr.EitherOrRight		= <right <Expr>>
+	
 	Expr				= <(<Expr>)>		{bracket}
+	  
+	  
+ context-free priorities
+ 
+ 	Expr.EitherOrLeft > Expr.Multiplication
+
+ context-free priorities
+ 
+	Expr.EitherOrRight > Expr.Multiplication
+
+ context-free priorities
+ 
+ 	Expr.OptionalJust > Expr.Multiplication
 	  
  context-free priorities
  
  	Expr.Multiplication > Expr.Addition, Expr.Subtraction
  	
  context-free priorities
- 
- 	Expr.Division > Expr.Addition, Expr.Subtraction
+ 	
+	Expr.Division > Expr.Addition, Expr.Subtraction
   
  template options
  
